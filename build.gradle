@@ -1,0 +1,46 @@
+/*
+ * Archivo de configuración de Gradle.
+ * Reemplaza al pom.xml de Maven. Define las dependencias y cómo se construye el proyecto.
+ */
+
+// 1. Plugins: Añaden funcionalidades a Gradle.
+plugins {
+    id 'java' // Plugin para compilar código Java.
+    id 'application' // Plugin para ejecutar y empaquetar la aplicación.
+    // Plugin "shadow" para crear un "uber-jar" (un solo .jar con todas las dependencias)
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
+}
+
+// 2. Repositorios: Dónde busca Gradle las dependencias.
+repositories {
+    mavenCentral() // El repositorio de dependencias más común.
+}
+
+// 3. Versión de Java
+sourceCompatibility = 11
+
+// 4. Dependencias: Las librerías que necesita tu proyecto.
+dependencies {
+    // === Framework Principal: Javalin ===
+    implementation 'io.javalin:javalin-bundle:5.6.1'
+
+    // === Manejo de JSON (Serialización/Deserialización) ===
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.2'
+
+    // === Conector de la Base de Datos: MySQL ===
+    runtimeOnly 'mysql:mysql-connector-java:8.0.28'
+
+    // === Logger (Registro de eventos) ===
+    implementation 'org.slf4j:slf4j-simple:2.0.7'
+}
+
+// 5. Configuración de la aplicación
+// Le dice al plugin 'application' y 'shadow' cuál es la clase principal que debe ejecutar.
+application {
+    mainClass = 'com.trukea.Main'
+}
+
+// Esto asegura que el "uber-jar" creado por el plugin shadow sea el artefacto principal.
+shadowJar {
+    archiveClassifier = ''
+}
