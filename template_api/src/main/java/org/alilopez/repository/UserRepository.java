@@ -60,28 +60,4 @@ public class UserRepository {
             stmt.executeUpdate();
         }
     }
-
-    // Actualizar usuario
-    public void update(User user) throws SQLException {
-        String query = "UPDATE users SET name = ?, email = ? WHERE id = ?";
-        try (Connection conn = DatabaseConfig.getDataSource().getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query)) {
-            stmt.setString(1, user.getName());
-            stmt.setString(2, user.getEmail());
-            stmt.setInt(3, user.getId());
-            stmt.executeUpdate();
-        }
-    }
-
-    // Eliminar usuario
-    public void delete(int id) throws SQLException {
-        String query = "DELETE FROM users WHERE id = ?";
-        try (Connection conn = DatabaseConfig.getDataSource().getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query)) {
-            stmt.setInt(1, id);
-            stmt.executeUpdate();
-        }
-    }
-
-
 }

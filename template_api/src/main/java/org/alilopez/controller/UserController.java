@@ -47,28 +47,4 @@ public class UserController {
             ctx.status(400).result("Error al crear usuario");
         }
     }
-
-    public void update(Context ctx) {
-        try {
-            int id = Integer.parseInt(ctx.pathParam("id"));
-            User user = ctx.bodyAsClass(User.class);
-            user.setId(id);
-            userService.updateUser(user);
-            ctx.status(200).result("Usuario actualizado");
-        } catch (Exception e) {
-            ctx.status(400).result("Error al actualizar usuario");
-        }
-    }
-
-    public void delete(Context ctx) {
-        try {
-            int id = Integer.parseInt(ctx.pathParam("id"));
-            userService.deleteUser(id);
-            ctx.status(200).result("Usuario eliminado");
-        } catch (Exception e) {
-            ctx.status(400).result("Error al eliminar usuario");
-        }
-    }
-
-
 }
