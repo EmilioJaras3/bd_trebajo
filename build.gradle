@@ -1,11 +1,12 @@
-/*
- * Archivo de configuración de Gradle para la API con arquitectura en capas.
- */
 plugins {
     id 'java'
     id 'application'
     id 'com.github.johnrengelman.shadow' version '7.1.2'
 }
+
+// CORRECCIÓN: Se ajusta el nombre del proyecto para que coincida con el JAR esperado
+version = '1.0.0'
+rootProject.name = 'template_api'
 
 repositories {
     mavenCentral()
@@ -14,25 +15,16 @@ repositories {
 sourceCompatibility = 11
 
 dependencies {
-    // Framework Principal: Javalin (Downgrade a 4.6.4 para compatibilidad)
     implementation 'io.javalin:javalin-bundle:4.6.4'
-
-    // Manejo de JSON (necesario para el bundle de Javalin)
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.2'
-
-    // Conector de la Base de Datos: MySQL
     runtimeOnly 'mysql:mysql-connector-java:8.0.28'
-
-    // Logger (para ver los logs de Javalin)
     implementation 'org.slf4j:slf4j-simple:2.0.7'
 }
 
 application {
-    // Clase principal que Gradle ejecutará
     mainClass = 'com.trukea.Main'
 }
 
-// Configuración para crear un "uber-jar" que incluya todas las dependencias.
 shadowJar {
     archiveClassifier = ''
 }
