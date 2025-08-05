@@ -4,7 +4,8 @@ plugins {
     id 'com.github.johnrengelman.shadow' version '7.1.2'
 }
 
-archivesBaseName = 'custom-arbol-api'
+// Se ajusta el nombre del proyecto y la versión para que coincida con el JAR esperado por el script del usuario
+archivesBaseName = 'template_api'
 version = '1.0.0'
 
 repositories {
@@ -14,14 +15,15 @@ repositories {
 sourceCompatibility = 11
 
 dependencies {
-    implementation 'io.javalin:javalin-bundle:5.6.1'
+    // Se usa una versión de Javalin 4.x para compatibilidad con el entorno del usuario
+    implementation 'io.javalin:javalin-bundle:4.6.4'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.2'
     runtimeOnly 'mysql:mysql-connector-java:8.0.28'
     implementation 'org.slf4j:slf4j-simple:2.0.7'
 }
 
 application {
-    mainClass = 'com.custom.api.Main'
+    mainClass = 'com.trukea.Main'
 }
 
 shadowJar {

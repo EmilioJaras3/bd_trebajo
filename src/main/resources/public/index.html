@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Test de API</title>
+    <style>
+        body { font-family: sans-serif; margin: 2em; }
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #ddd; padding: 8px; }
+        form { margin-bottom: 1em; }
+    </style>
+</head>
+<body>
+    <h1>Gestor de Productos</h1>
+    <form id="product-form">
+        <input type="hidden" id="product-id">
+        <input type="text" id="nombre" placeholder="Nombre" required>
+        <input type="number" id="precio" placeholder="Precio" step="0.01" required>
+        <input type="number" id="stock" placeholder="Stock" required>
+        <button type="submit">Guardar</button>
+    </form>
+    <h2>Lista de Productos</h2>
+    <table>
+        <thead>
+            <tr><th>ID</th><th>Nombre</th><th>Precio</th><th>Stock</th><th>Acciones</th></tr>
+        </thead>
+        <tbody id="product-list"></tbody>
+    </table>
+<script>
+    const API_URL = 'http://localhost:3000/productos';
+    const form = document.getElementById('product-form');
+    const productList = document.getElementById('product-list');
+
+    async function fetchProducts() {
+        const response = await fetch(API_URL);
+        const products = await response.json();
+        productList.innerHTML = '';
+        products.forEach(p => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${p.id}</td>
+                <td>${p.nombre}</td>
+                <td>${p.precio}</td>
+                <td>${p.stock}</td>
+                <td><button onclick="deleteProduct(${p.id})">Borrar</button></td>
+            `;
+            productList.appendChild(row);
+        });
+    }
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const productData = {
+            nombre: document.getElementById('nombre').value,
+            precio: parseFloat(document.getElementById('precio').value),
+            stock: parseInt(document.getElementById('stock').value)
+        };
+        await fetch(API_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(productData)
+        });
+        form.reset();
+        fetchProducts();
+    });
+
+    async function deleteProduct(id) {
+        await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
+        fetchProducts();
+    }
+
+    document.addEventListener('DOMContentLoaded', fetchProducts);
+</script>
+</body>
+</html>
