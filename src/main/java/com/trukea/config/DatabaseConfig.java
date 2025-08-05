@@ -7,10 +7,11 @@ import java.sql.SQLException;
 public class DatabaseConfig {
 
     private static String buildUrl() {
-        // Construye la URL a partir de las variables de entorno del script del usuario
+
         String host = System.getenv("MYSQL_HOST");
         String port = System.getenv("MYSQL_PORT");
         String database = System.getenv("MYSQL_DATABASE");
+
 
         if (host == null) host = "52.71.195.110";
         if (port == null) port = "3306";
@@ -20,11 +21,13 @@ public class DatabaseConfig {
     }
 
     private static String getUsername() {
+
         String user = System.getenv("MYSQL_USER");
         return user != null ? user : "admin";
     }
 
     private static String getPassword() {
+
         String pass = System.getenv("MYSQL_PASSWORD");
         return pass != null ? pass : "Angelito7@2024!";
     }
