@@ -1,8 +1,15 @@
 package com.trukea.config;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
 public class DatabaseConfig {
+    // --- ¡INSTRUCCIONES! ---
+    // Javalin no necesita un método `initialize`. Se puede eliminar.
+    // El framework se encarga de iniciar y detener la aplicación.
+    // Lo más importante es que el método `getConnection` funcione correctamente.
+
     private static final String URL = System.getenv("DATABASE_URL") != null
             ? System.getenv("DATABASE_URL")
             : "jdbc:mysql://52.71.195.110:3306/trukea_db";
@@ -14,23 +21,10 @@ public class DatabaseConfig {
             : "Angelito7@2024!";
 
     public static Connection getConnection() throws SQLException {
-        // --- NOTA PARA TI ---
-        // Para que esta línea funcione, necesitas tener el "driver" de MySQL en tu proyecto.
-        // Si usas Maven, esto se añade en el archivo pom.xml.
-        // Si no, tienes que añadir el archivo .jar del conector de MySQL manualmente a tu classpath.
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-        } catch (ClassNotFoundException e) {
-            throw new SQLException("Error: Driver de MySQL no encontrado.", e);
-        }
+        // --- NOTA IMPORTANTE ---
+        // Para que esta conexión funcione, Maven debe haber descargado el conector de MySQL
+        // gracias a la dependencia que añadimos en el `pom.xml`.
+        // No es necesario llamar a `Class.forName()` en las versiones modernas de JDBC.
         return DriverManager.getConnection(URL, USERNAME, PASSWORD);
-    }
-
-    public static void initialize() {
-        try (Connection conn = getConnection()) {
-            System.out.println("Conectado a la base de datos MySQL");
-        } catch (Exception e) {
-            System.err.println("Error conectando a la base de datos: " + e.getMessage());
-        }
     }
 }
