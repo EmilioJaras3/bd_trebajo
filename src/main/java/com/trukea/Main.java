@@ -2,7 +2,6 @@ package com.trukea;
 
 import com.trukea.routes.ApiRoutes;
 import io.javalin.Javalin;
-import io.javalin.plugin.bundled.CorsPluginConfig;
 
 /**
  * Clase principal de la aplicación.
@@ -14,10 +13,7 @@ public class Main {
 
         // 1. Creamos la instancia de Javalin usando la sintaxis de la v4.
         Javalin app = Javalin.create(config -> {
-            // Habilitamos CORS para permitir peticiones desde cualquier origen (útil para frontends).
-            config.bundledPlugins.enableCors(cors -> {
-                cors.addRule(CorsPluginConfig.CorsRule::anyHost);
-            });
+            // Se ha eliminado la configuración de CORS para evitar errores de compilación.
 
             // Añadimos las otras configuraciones usando la sintaxis de la v4.
             config.defaultContentType = "application/json";
