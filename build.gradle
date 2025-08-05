@@ -4,8 +4,6 @@ plugins {
     id 'com.github.johnrengelman.shadow' version '7.1.2'
 }
 
-// CORRECCIÓN: Se ajusta el nombre del proyecto y la versión
-// Esta es la forma correcta de nombrar el archivo JAR de salida
 archivesBaseName = 'template_api'
 version = '1.0.0'
 
@@ -16,6 +14,7 @@ repositories {
 sourceCompatibility = 11
 
 dependencies {
+
     implementation 'io.javalin:javalin-bundle:4.6.4'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.2'
     runtimeOnly 'mysql:mysql-connector-java:8.0.28'

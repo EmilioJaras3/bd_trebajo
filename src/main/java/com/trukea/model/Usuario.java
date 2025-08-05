@@ -2,26 +2,11 @@ package com.trukea.model;
 
 import java.sql.Date;
 
-/**
- * Modelo de datos (POJO) para un Usuario.
- * Representa una fila en la tabla de usuarios.
- */
 public class Usuario {
-
     private int id;
     private String nombreDeUsuario;
     private String email;
     private Date fechaDeRegistro;
-
-    public Usuario() {
-    }
-
-    public Usuario(int id, String nombreDeUsuario, String email, Date fechaDeRegistro) {
-        this.id = id;
-        this.nombreDeUsuario = nombreDeUsuario;
-        this.email = email;
-        this.fechaDeRegistro = fechaDeRegistro;
-    }
 
     // Getters y Setters
     public int getId() { return id; }
