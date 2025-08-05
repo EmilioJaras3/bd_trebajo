@@ -1,101 +1,88 @@
 package com.trukea.controller;
 
-import com.trukea.dao.ProductoDAO;
 import com.trukea.model.Producto;
+import com.trukea.service.ProductoService;
 import io.javalin.http.Context;
-import java.sql.SQLException;
-import java.util.List;
 
 /**
  * Controlador para el recurso Producto.
  *
- * --- ¿CÓMO FUNCIONA EN JAVALIN? ---
- * A diferencia del MVC tradicional con Servlets, en Javalin un controlador es simplemente
- * una clase que agrupa la lógica de manejo de peticiones.
- * Cada método público recibe un objeto `Context` (ctx). Este objeto es mágico:
- * - `ctx.pathParam("id")`: Obtiene parámetros de la URL (ej: /productos/5).
- * - `ctx.bodyAsClass(Producto.class)`: Convierte el JSON de la petición en un objeto Java.
- * - `ctx.json(listaDeProductos)`: Convierte un objeto o lista Java a JSON y lo envía como respuesta.
- * - `ctx.status(200)`: Establece el código de estado HTTP de la respuesta.
+ * --- ¿CUÁL ES SU PROPÓSITO? ---
+ * Esta capa es el punto de entrada para las peticiones HTTP.
+ * NO contiene lógica de negocio. Su única responsabilidad es:
+ * 1. Recibir la petición (`Context ctx`).
+ * 2. Extraer datos de la petición (parámetros, cuerpo JSON).
+ * 3. Llamar al método correspondiente en la capa de Servicio.
+ * 4. Devolver la respuesta (en formato JSON, con el código de estado correcto).
  */
 public class ProductoController {
 
-    private final ProductoDAO productoDAO;
+    private final ProductoService productoService;
 
-    public ProductoController(ProductoDAO productoDAO) {
-        this.productoDAO = productoDAO;
+    // Recibe el servicio a través de inyección de dependencias.
+    public ProductoController(ProductoService productoService) {
+        this.productoService = productoService;
     }
 
-    // --- MANEJADOR PARA GET /productos ---
     public void getAll(Context ctx) {
         try {
-            List<Producto> productos = productoDAO.getAll();
-            ctx.json(productos); // Envía la lista de productos como JSON.
-            ctx.status(200); // OK
-        } catch (SQLException e) {
-            ctx.status(500).result("Error de base de datos al obtener productos: " + e.getMessage());
+            ctx.json(productoService.getAll());
+            ctx.status(200);
+        } catch (Exception e) {
+            ctx.status(500).result("Error al obtener los productos: " + e.getMessage());
         }
     }
 
-    // --- MANEJADOR PARA GET /productos/{id} ---
     public void getOne(Context ctx) {
         try {
-            int id = Integer.parseInt(ctx.pathParam("id")); // Obtiene el ID de la URL.
-            Producto producto = productoDAO.findById(id);
+            int id = Integer.parseInt(ctx.pathParam("id"));
+            Producto producto = productoService.findById(id);
             if (producto != null) {
                 ctx.json(producto);
-                ctx.status(200); // OK
+                ctx.status(200);
             } else {
-                ctx.status(404).result("Producto no encontrado."); // Not Found
+                ctx.status(404).result("Producto no encontrado.");
             }
         } catch (NumberFormatException e) {
-            ctx.status(400).result("El ID del producto debe ser un número entero."); // Bad Request
-        } catch (SQLException e) {
-            ctx.status(500).result("Error de base de datos al buscar el producto: " + e.getMessage());
+            ctx.status(400).result("El ID debe ser un número.");
+        } catch (Exception e) {
+            ctx.status(500).result("Error al buscar el producto: " + e.getMessage());
         }
     }
 
-    // --- MANEJADOR PARA POST /productos ---
     public void create(Context ctx) {
         try {
-            // Convierte el JSON del cuerpo de la petición en un objeto Producto.
             Producto nuevoProducto = ctx.bodyAsClass(Producto.class);
-            productoDAO.add(nuevoProducto);
-            ctx.status(201); // Created
-            ctx.result("Producto creado exitosamente.");
+            productoService.save(nuevoProducto);
+            ctx.status(201).result("Producto creado.");
         } catch (Exception e) {
-            // Esto puede fallar si el JSON es inválido o por un error de BD.
-            ctx.status(400).result("Error al crear el producto: " + e.getMessage());
+            ctx.status(400).result("Datos inválidos para crear el producto: " + e.getMessage());
         }
     }
 
-    // --- MANEJADOR PARA PUT /productos/{id} ---
     public void update(Context ctx) {
         try {
             int id = Integer.parseInt(ctx.pathParam("id"));
             Producto productoActualizado = ctx.bodyAsClass(Producto.class);
-
-            // Asegurarse de que el ID en el cuerpo coincida con el ID en la URL.
-            productoActualizado.setId(id);
-
-            productoDAO.update(productoActualizado);
-            ctx.status(200); // OK
-            ctx.result("Producto actualizado exitosamente.");
+            productoActualizado.setId(id); // Aseguramos que el ID sea el de la URL
+            productoService.update(productoActualizado);
+            ctx.status(200).result("Producto actualizado.");
+        } catch (NumberFormatException e) {
+            ctx.status(400).result("El ID debe ser un número.");
         } catch (Exception e) {
-            ctx.status(400).result("Error al actualizar el producto: " + e.getMessage());
+            ctx.status(400).result("Datos inválidos para actualizar el producto: " + e.getMessage());
         }
     }
 
-    // --- MANEJADOR PARA DELETE /productos/{id} ---
     public void delete(Context ctx) {
         try {
             int id = Integer.parseInt(ctx.pathParam("id"));
-            productoDAO.delete(id);
-            ctx.status(204); // No Content (éxito, sin cuerpo de respuesta)
+            productoService.delete(id);
+            ctx.status(204); // No Content
         } catch (NumberFormatException e) {
-            ctx.status(400).result("El ID del producto debe ser un número entero.");
-        } catch (SQLException e) {
-            ctx.status(500).result("Error de base de datos al borrar el producto: " + e.getMessage());
+            ctx.status(400).result("El ID debe ser un número.");
+        } catch (Exception e) {
+            ctx.status(500).result("Error al eliminar el producto: " + e.getMessage());
         }
     }
 }

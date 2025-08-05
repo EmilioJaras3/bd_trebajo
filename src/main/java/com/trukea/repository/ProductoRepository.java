@@ -1,4 +1,4 @@
-package com.trukea.dao;
+package com.trukea.repository;
 
 import com.trukea.config.DatabaseConfig;
 import com.trukea.model.Producto;
@@ -8,14 +8,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * DAO para el recurso Producto.
- * Contiene toda la lógica de base de datos (CRUD) para los productos.
+ * Repository para el recurso Producto.
+ * Esta capa se comunica directamente con la base de datos.
+ * Es el equivalente al patrón DAO (Data Access Object).
  *
  * --- ¡INSTRUCCIONES! ---
- * Adapta todas las sentencias SQL (`SELECT`, `INSERT`, `UPDATE`, `DELETE`)
- * para que coincidan con los nombres de tu tabla y columnas de productos.
+ * Adapta todas las sentencias SQL para que coincidan con tu tabla de productos.
  */
-public class ProductoDAO {
+public class ProductoRepository {
 
     public List<Producto> getAll() throws SQLException {
         List<Producto> productos = new ArrayList<>();
@@ -27,10 +27,10 @@ public class ProductoDAO {
 
             while (rs.next()) {
                 Producto producto = new Producto();
-                producto.setId(rs.getInt("id_producto")); // <-- ADAPTAR
-                producto.setNombre(rs.getString("nombre")); // <-- ADAPTAR
-                producto.setPrecio(rs.getDouble("precio")); // <-- ADAPTAR
-                producto.setStock(rs.getInt("stock")); // <-- ADAPTAR
+                producto.setId(rs.getInt("id_producto"));
+                producto.setNombre(rs.getString("nombre"));
+                producto.setPrecio(rs.getDouble("precio"));
+                producto.setStock(rs.getInt("stock"));
                 productos.add(producto);
             }
         }
@@ -48,25 +48,25 @@ public class ProductoDAO {
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
                     producto = new Producto();
-                    producto.setId(rs.getInt("id_producto")); // <-- ADAPTAR
-                    producto.setNombre(rs.getString("nombre")); // <-- ADAPTAR
-                    producto.setPrecio(rs.getDouble("precio")); // <-- ADAPTAR
-                    producto.setStock(rs.getInt("stock")); // <-- ADAPTAR
+                    producto.setId(rs.getInt("id_producto"));
+                    producto.setNombre(rs.getString("nombre"));
+                    producto.setPrecio(rs.getDouble("precio"));
+                    producto.setStock(rs.getInt("stock"));
                 }
             }
         }
         return producto;
     }
 
-    public void add(Producto producto) throws SQLException {
+    public void save(Producto producto) throws SQLException {
         String sql = "INSERT INTO tu_tabla_productos (nombre, precio, stock) VALUES (?, ?, ?)"; // <-- ADAPTAR
 
         try (Connection conn = DatabaseConfig.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-            pstmt.setString(1, producto.getNombre()); // <-- ADAPTAR
-            pstmt.setDouble(2, producto.getPrecio()); // <-- ADAPTAR
-            pstmt.setInt(3, producto.getStock()); // <-- ADAPTAR
+            pstmt.setString(1, producto.getNombre());
+            pstmt.setDouble(2, producto.getPrecio());
+            pstmt.setInt(3, producto.getStock());
             pstmt.executeUpdate();
         }
     }
@@ -77,10 +77,10 @@ public class ProductoDAO {
         try (Connection conn = DatabaseConfig.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-            pstmt.setString(1, producto.getNombre()); // <-- ADAPTAR
-            pstmt.setDouble(2, producto.getPrecio()); // <-- ADAPTAR
-            pstmt.setInt(3, producto.getStock()); // <-- ADAPTAR
-            pstmt.setInt(4, producto.getId()); // <-- ADAPTAR (el ID para el WHERE)
+            pstmt.setString(1, producto.getNombre());
+            pstmt.setDouble(2, producto.getPrecio());
+            pstmt.setInt(3, producto.getStock());
+            pstmt.setInt(4, producto.getId());
             pstmt.executeUpdate();
         }
     }
