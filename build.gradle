@@ -4,9 +4,10 @@ plugins {
     id 'com.github.johnrengelman.shadow' version '7.1.2'
 }
 
-// CORRECCIÓN: Se ajusta el nombre del proyecto para que coincida con el JAR esperado
+// CORRECCIÓN: Se ajusta el nombre del proyecto y la versión
+// Esta es la forma correcta de nombrar el archivo JAR de salida
+archivesBaseName = 'template_api'
 version = '1.0.0'
-rootProject.name = 'template_api'
 
 repositories {
     mavenCentral()
