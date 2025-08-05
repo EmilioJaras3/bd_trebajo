@@ -4,11 +4,11 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+/**
+ * Clase de configuración para la conexión a la base de datos.
+ * Se mantiene simple y centralizada.
+ */
 public class DatabaseConfig {
-    // --- ¡INSTRUCCIONES! ---
-    // Javalin no necesita un método `initialize`. Se puede eliminar.
-    // El framework se encarga de iniciar y detener la aplicación.
-    // Lo más importante es que el método `getConnection` funcione correctamente.
 
     private static final String URL = System.getenv("DATABASE_URL") != null
             ? System.getenv("DATABASE_URL")
@@ -21,10 +21,6 @@ public class DatabaseConfig {
             : "Angelito7@2024!";
 
     public static Connection getConnection() throws SQLException {
-        // --- NOTA IMPORTANTE ---
-        // Para que esta conexión funcione, Maven debe haber descargado el conector de MySQL
-        // gracias a la dependencia que añadimos en el `pom.xml`.
-        // No es necesario llamar a `Class.forName()` en las versiones modernas de JDBC.
         return DriverManager.getConnection(URL, USERNAME, PASSWORD);
     }
 }
