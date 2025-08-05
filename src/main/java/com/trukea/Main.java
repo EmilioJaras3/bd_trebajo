@@ -2,7 +2,7 @@ package com.trukea;
 
 import com.trukea.routes.ApiRoutes;
 import io.javalin.Javalin;
-import io.javalin.http.staticfiles.Location; // <-- IMPORTANTE: Añadir esta línea
+import io.javalin.http.staticfiles.Location;
 
 /**
  * Clase principal de la aplicación.
