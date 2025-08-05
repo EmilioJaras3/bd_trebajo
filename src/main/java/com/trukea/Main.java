@@ -21,7 +21,9 @@ public class Main {
         Javalin app = Javalin.create(config -> {
             config.http.defaultContentType = "application/json";
             config.router.ignoreTrailingSlashes = true;
-            // Podríamos añadir más configuraciones aquí, como `config.accessManager(...)` para seguridad.
+            // Le decimos a Javalin que sirva archivos estáticos desde la carpeta 'public' en los recursos.
+            // Así es como podrá encontrar nuestro index.html.
+            config.staticFiles.add("/public");
         });
 
         // 2. Le pasamos la instancia de la app a nuestro configurador de rutas.
