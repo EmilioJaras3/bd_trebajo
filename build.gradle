@@ -14,8 +14,8 @@ repositories {
 sourceCompatibility = 11
 
 dependencies {
-    // Framework Principal: Javalin (con plugins de JSON, logging, etc.)
-    implementation 'io.javalin:javalin-bundle:5.6.1'
+    // Framework Principal: Javalin (Downgrade a 4.6.4 para compatibilidad)
+    implementation 'io.javalin:javalin-bundle:4.6.4'
 
     // Manejo de JSON (necesario para el bundle de Javalin)
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.2'
